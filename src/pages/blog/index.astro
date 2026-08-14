@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title="文章" description="ALL0VEPH4U 的全部文章，按时间排序。">
+  <div class="container-narrow">
+    <header class="post-header">
+      <h1 class="post-title">文章</h1>
+      <p class="page-subtitle">共 {posts.length} 篇 · 持续更新中</p>
+    </header>
+    <ul class="post-list">
+      {
+        posts.map((post) => (
+          <li>
+            <a class="post-row" href={`/blog/${post.id}/`}>
+              <time class="post-row__time" datetime={post.data.pubDate.toISOString()}>
+                {fmt(post.data.pubDate)}
+              </time>
+              <div>
+                <span class="post-row__title">{post.data.title}</span>
+                <p class="post-row__desc">{post.data.description}</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

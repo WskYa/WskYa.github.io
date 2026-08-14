@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout>
+  <section class="hero container">
+    <p class="hero__eyebrow">个人博客 · 记录与思考</p>
+    <h1 class="hero__title">ALL0VEPH4U</h1>
+    <p class="hero__subtitle">
+      欢迎来到我的博客。这里记录我对技术、设计与生活的观察和思考，没有噪音，只有文字。
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="/blog/">阅读文章</a>
+      <a class="btn btn--ghost" href="/about/">关于我</a>
+    </div>
+  </section>
+
+  <section class="band section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">最新文章</h2>
+        <a class="section__more" href="/blog/">查看全部 ›</a>
+      </div>
+      {
+        posts.map((post) => (
+          <a class="post-card" href={`/blog/${post.id}/`}>
+            <time class="post-card__time" datetime={post.data.pubDate.toISOString()}>
+              {fmt(post.data.pubDate)}
+            </time>
+            <span class="post-card__title">{post.data.title}</span>
+            <p class="post-card__desc">{post.data.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
