@@ -502,6 +502,7 @@ html[data-theme="dark"] .btn--primary:hover {
 
 .prose p {
   margin: 0 0 1.25em;
+  text-indent: 2em; /* 中文排版：段落首行缩进两字 */
 }
 
 .prose h2 {
