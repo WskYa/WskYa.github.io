@@ -1014,3 +1014,149 @@ html[data-theme="dark"] .btn--primary:hover {
     padding: var(--space-6) 0;
   }
 }
+
+/* ---------- 首页：关于我 + 数据统计 ---------- */
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.card {
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 32px;
+  transition: box-shadow 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+
+.about-card__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.about-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  object-fit: cover;
+}
+
+.about-card__name {
+  font-size: var(--text-md);
+  letter-spacing: -0.012em;
+}
+
+.about-card__tagline {
+  margin: 4px 0 0;
+  font-size: 15px;
+  color: var(--text-2);
+}
+
+.about-card__intro {
+  margin: 0 0 var(--space-4);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.about-card__links {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* 胶囊徽章（技能 / 链接通用） */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-2);
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+
+.pill:hover {
+  color: var(--text);
+  border-color: var(--text-3);
+}
+
+/* 数据统计 */
+.stats {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: var(--space-3);
+}
+
+.stats__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stats__num {
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats__label {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+/* ---------- 首页：技能技术栈 ---------- */
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.skills__category {
+  margin: 0 0 var(--space-3);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+.skills__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+@media (max-width: 768px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skills {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 24px;
+  }
+
+  .stats__num {
+    font-size: 32px;
+  }
+}

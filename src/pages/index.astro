@@ -1,15 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { site, skills } from '../data/site';
 
-const posts = (await getCollection('blog'))
-  .filter((post) => !post.data.draft)
+const allPosts = (await getCollection('blog')).filter((post) => !post.data.draft);
+const posts = [...allPosts]
   .sort(
     (a, b) =>
       (b.data.pubDate?.valueOf() ?? Number.MAX_SAFE_INTEGER) -
       (a.data.pubDate?.valueOf() ?? Number.MAX_SAFE_INTEGER)
   )
   .slice(0, 5);
+
+const postCount = allPosts.length;
+const totalChars = allPosts.reduce(
+  (sum, post) => sum + (post.body ?? '').replace(/\s+/g, '').length,
+  0
+);
+const daysSinceLaunch = Math.max(
+  1,
+  Math.floor((Date.now() - new Date(site.launchDate).getTime()) / 86400000)
+);
 
 const fmt = (d: Date | undefined) =>
   d ? d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
@@ -37,7 +48,7 @@ const fmt = (d: Date | undefined) =>
       {
         posts.map((post) => (
           <a class="post-card" href={`/blog/${post.id}/`}>
-            <time class="post-card__time" datetime={post.data.pubDate.toISOString()}>
+            <time class="post-card__time" datetime={post.data.pubDate?.toISOString()}>
               {fmt(post.data.pubDate)}
             </time>
             <span class="post-card__title">{post.data.title || post.id}</span>
@@ -45,6 +56,71 @@ const fmt = (d: Date | undefined) =>
           </a>
         ))
       }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container home-grid">
+      <div class="card about-card">
+        <div class="about-card__top">
+          <img
+            class="about-card__avatar"
+            src={site.avatar}
+            width="64"
+            height="64"
+            alt="头像"
+            loading="lazy"
+          />
+          <div>
+            <h2 class="about-card__name">{site.author}</h2>
+            <p class="about-card__tagline">{site.tagline}</p>
+          </div>
+        </div>
+        <p class="about-card__intro">{site.intro}</p>
+        <div class="about-card__links">
+          <a class="pill" href={site.github} target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="/rss.xml">RSS 订阅</a>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <div class="stats">
+          <div class="stats__item">
+            <span class="stats__num">{postCount}</span>
+            <span class="stats__label">篇文章</span>
+          </div>
+          <div class="stats__item">
+            <span class="stats__num">
+              {totalChars >= 10000 ? (totalChars / 10000).toFixed(1) : totalChars.toLocaleString()}
+            </span>
+            <span class="stats__label">{totalChars >= 10000 ? '万字' : '字'}</span>
+          </div>
+          <div class="stats__item">
+            <span class="stats__num">{daysSinceLaunch}</span>
+            <span class="stats__label">天前上线</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">技能技术栈</h2>
+      </div>
+      <div class="skills">
+        {
+          skills.map((group) => (
+            <div class="skills__group">
+              <h3 class="skills__category">{group.category}</h3>
+              <div class="skills__items">
+                {group.items.map((item) => <span class="pill">{item}</span>)}
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>
