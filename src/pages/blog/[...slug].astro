@@ -31,6 +31,16 @@ const fmt = (d: Date) =>
   description={post.data.description}
   ogType="article"
 >
+  <button class="toc__toggle" id="toc-toggle" type="button" aria-label="显示文章目录">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M2.5 4h11M2.5 8h11M2.5 12h7" />
+    </svg>
+  </button>
+  <nav class="toc" id="toc" aria-label="文章目录">
+    <p class="toc__title">目录</p>
+    <ul class="toc__list" id="toc-list"></ul>
+  </nav>
+
   <article class="container-narrow">
     <header class="post-header">
       <a class="back-link" href="/blog/">← 所有文章</a>
@@ -49,3 +59,58 @@ const fmt = (d: Date) =>
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  // 左侧目录：从正文标题自动生成，滚动时高亮当前章节
+  const article = document.querySelector('.prose');
+  const toc = document.getElementById('toc');
+  const tocList = document.getElementById('toc-list');
+  const tocToggle = document.getElementById('toc-toggle');
+
+  if (article && toc && tocList && tocToggle) {
+    const headings = Array.from(article.querySelectorAll('h2, h3'));
+    if (headings.length === 0) {
+      tocToggle.style.display = 'none';
+    } else {
+      const items = [];
+      headings.forEach((h, idx) => {
+        if (!h.id) h.id = `toc-${idx}`;
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.className = 'toc__item' + (h.tagName === 'H3' ? ' toc__item--h3' : '');
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        tocList.appendChild(li);
+        items.push({ el: h, a });
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              items.forEach(({ a }) => a.classList.remove('toc__item--active'));
+              const match = items.find(({ el }) => el === entry.target);
+              if (match) match.a.classList.add('toc__item--active');
+            }
+          });
+        },
+        { rootMargin: '-15% 0px -75% 0px' }
+      );
+      items.forEach(({ el }) => io.observe(el));
+
+      const open = () => toc.classList.add('toc--open');
+      const close = () => toc.classList.remove('toc--open');
+      tocToggle.addEventListener('click', () =>
+        toc.classList.contains('toc--open') ? close() : open()
+      );
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+      document.addEventListener('click', (e) => {
+        if (!toc.contains(e.target) && !tocToggle.contains(e.target)) close();
+      });
+      tocList.addEventListener('click', close);
+    }
+  }
+</script>

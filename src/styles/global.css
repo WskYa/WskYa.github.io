@@ -655,3 +655,355 @@ html[data-theme="dark"] .btn--primary:hover {
     font-size: 32px;
   }
 }
+
+/* ---------- 名人名言 ---------- */
+
+.quote-band {
+  background: var(--bg-soft);
+  padding: var(--space-7) 0;
+  transition: background-color 0.3s var(--ease);
+}
+
+.quote {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.quote__mark {
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-3);
+  margin-bottom: var(--space-3);
+}
+
+.quote__text {
+  font-size: var(--text-md);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+  margin: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.quote--fade {
+  opacity: 0;
+}
+
+.quote__foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: var(--space-3);
+}
+
+.quote__author {
+  font-size: var(--text-sm);
+  color: var(--text-3);
+}
+
+.quote__refresh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
+    transform 0.4s var(--ease);
+}
+
+.quote__refresh:hover {
+  color: var(--text);
+  background: var(--code-bg);
+  transform: rotate(180deg);
+}
+
+.quote__refresh svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- 音乐播放器 ---------- */
+
+.music {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 90;
+}
+
+.music__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  background: var(--header-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  color: var(--text-2);
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.music__btn:hover {
+  color: var(--text);
+  transform: scale(1.05);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.music__btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.music__panel {
+  position: absolute;
+  right: 0;
+  bottom: 60px;
+  width: 340px;
+  padding: var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--header-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: var(--card-shadow-hover);
+  animation: music-pop 0.25s var(--ease);
+}
+
+@keyframes music-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.music__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+  padding: 0 4px;
+}
+
+.music__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.music__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.music__close:hover {
+  color: var(--text);
+  background: var(--code-bg);
+}
+
+.music__close svg {
+  width: 12px;
+  height: 12px;
+}
+
+.music__frame-wrap {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.music__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding: 0 4px;
+}
+
+.music__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.music__step:hover {
+  color: var(--text);
+  background: var(--code-bg);
+}
+
+.music__step svg {
+  width: 14px;
+  height: 14px;
+}
+
+.music__track {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-2);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- 文章左侧目录 ---------- */
+
+.toc__toggle {
+  position: fixed;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 81;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  background: var(--header-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  color: var(--text-2);
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.toc__toggle:hover {
+  color: var(--text);
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.toc__toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toc {
+  position: fixed;
+  left: 64px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 80;
+  width: 240px;
+  max-height: 62vh;
+  overflow-y: auto;
+  padding: var(--space-4);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--header-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: var(--card-shadow-hover);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s var(--ease), visibility 0.25s var(--ease);
+}
+
+.toc--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.toc__title {
+  margin: 0 0 var(--space-2);
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc__item {
+  display: block;
+  padding: 5px 10px;
+  margin: 2px 0;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-2);
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.toc__item:hover {
+  color: var(--text);
+  background: var(--code-bg);
+}
+
+.toc__item--h3 {
+  padding-left: 24px;
+}
+
+.toc__item--active {
+  color: var(--accent);
+}
+
+/* 锚点跳转时避开吸顶导航 */
+.prose :is(h2, h3) {
+  scroll-margin-top: 72px;
+}
+
+/* 目录仅在宽屏显示 */
+@media (max-width: 1399px) {
+  .toc,
+  .toc__toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .music {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .music__panel {
+    width: min(340px, calc(100vw - 40px));
+  }
+
+  .quote-band {
+    padding: var(--space-6) 0;
+  }
+}
