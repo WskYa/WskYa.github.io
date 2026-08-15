@@ -22,6 +22,7 @@ const first = songs[0];
   <div class="music__panel" id="music-panel" hidden>
     <div class="music__head">
       <span class="music__title">音乐</span>
+      <span class="music__hint">自动连播中</span>
       <button class="music__close" id="music-close" type="button" aria-label="关闭播放器">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
           <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
@@ -69,12 +70,31 @@ const first = songs[0];
   if (btn && panel && frame && songs.length > 0) {
     let index = 0;
     let loaded = false;
+    let playTimer = null;
+
+    const renderTrack = () => {
+      const s = songs[index];
+      if (trackEl) trackEl.textContent = `${s.title} · ${s.artist}`;
+    };
 
     const load = (i) => {
       const s = songs[i];
-      // 网易云官方外链播放器：type=2 单曲，id 为歌曲 ID
-      frame.src = `https://music.163.com/outchain/player?type=2&id=${s.id}&auto=0&height=66`;
-      if (trackEl) trackEl.textContent = `${s.title} · ${s.artist}`;
+      // 网易云官方外链播放器：type=2 单曲，auto=1 自动播放，id 为歌曲 ID
+      frame.src = `https://music.163.com/outchain/player?type=2&id=${s.id}&auto=1&height=66`;
+      renderTrack();
+      // 播完自动切下一首：歌曲时长 + 3 秒缓冲，循环播放
+      clearTimeout(playTimer);
+      playTimer = setTimeout(() => next(), (s.duration ?? 180000) + 3000);
+    };
+
+    const next = () => {
+      index = (index + 1) % songs.length;
+      if (loaded) load(index);
+    };
+
+    const prev = () => {
+      index = (index - 1 + songs.length) % songs.length;
+      if (loaded) load(index);
     };
 
     const open = () => {
@@ -89,18 +109,13 @@ const first = songs[0];
     const close = () => {
       panel.hidden = true;
       btn.setAttribute('aria-expanded', 'false');
+      // 关闭面板不停止音乐，后台继续自动连播
     };
 
     btn.addEventListener('click', () => (panel.hidden ? open() : close()));
     closeBtn?.addEventListener('click', close);
-    prevBtn?.addEventListener('click', () => {
-      index = (index - 1 + songs.length) % songs.length;
-      if (loaded) load(index);
-    });
-    nextBtn?.addEventListener('click', () => {
-      index = (index + 1) % songs.length;
-      if (loaded) load(index);
-    });
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !panel.hidden) close();
     });
