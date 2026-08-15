@@ -44,7 +44,7 @@ const fmt = (d: Date) =>
   <article class="container-narrow">
     <header class="post-header">
       <a class="back-link" href="/blog/">← 所有文章</a>
-      <h1 class="post-title">{post.data.title}</h1>
+      <h1 class="post-title">{post.data.title || post.id}</h1>
       <div class="post-meta">
         {post.data.pubDate && (
           <time datetime={post.data.pubDate.toISOString()}>

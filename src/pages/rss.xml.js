@@ -13,7 +13,7 @@ export async function GET(context) {
     description: 'ALL0VEPH4U 的个人博客 — 记录与思考。',
     site: context.site,
     items: posts.map((post) => ({
-      title: post.data.title,
+      title: post.data.title || post.id,
       pubDate: post.data.pubDate ?? new Date(0),
       description: post.data.description,
       link: `/blog/${post.id}/`,
