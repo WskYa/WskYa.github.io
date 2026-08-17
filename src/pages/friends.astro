@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { friends } from '../data/friends';
+---
+
+<BaseLayout title="友链" description="ALL0VEPH4U 的朋友们。">
+  <div class="container-narrow">
+    <header class="post-header">
+      <h1 class="post-title">友链</h1>
+      <p class="page-subtitle">我的朋友们</p>
+    </header>
+
+    {
+      friends.length === 0 ? (
+        <div class="friends-empty">
+          <p>友链席位虚位以待 —— 想交换友链，去 GitHub 找我吧。</p>
+        </div>
+      ) : (
+        <ul class="friends">
+          {
+            friends.map((f) => (
+              <li>
+                <a class="friend-card" href={f.url} target="_blank" rel="noopener">
+                  <span class="friend-card__avatar" aria-hidden="true">{f.name.slice(0, 1)}</span>
+                  <span class="friend-card__name">{f.name}</span>
+                  <span class="friend-card__desc">{f.desc}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      )
+    }
+  </div>
+</BaseLayout>

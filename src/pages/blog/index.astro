@@ -18,12 +18,26 @@ const fmt = (d: Date | undefined) =>
   <div class="container-narrow">
     <header class="post-header">
       <h1 class="post-title">文章</h1>
-      <p class="page-subtitle">共 {posts.length} 篇 · 持续更新中</p>
+      <p class="page-subtitle" id="post-count">共 {posts.length} 篇 · 持续更新中</p>
     </header>
-    <ul class="post-list">
+    <div class="search">
+      <svg class="search__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="7" cy="7" r="4.5" />
+        <path d="m10.5 10.5 3.5 3.5" />
+      </svg>
+      <input
+        class="search__input"
+        id="post-search"
+        type="search"
+        placeholder="搜索文章标题或内容…"
+        autocomplete="off"
+        aria-label="搜索文章"
+      />
+    </div>
+    <ul class="post-list" id="post-list">
       {
         posts.map((post) => (
-          <li>
+          <li data-id={post.id}>
             <a class="post-row" href={`/blog/${post.id}/`}>
               {post.data.pubDate && (
                 <time class="post-row__time" datetime={post.data.pubDate.toISOString()}>
@@ -41,3 +55,38 @@ const fmt = (d: Date | undefined) =>
     </ul>
   </div>
 </BaseLayout>
+
+<script>
+  // 站内全文搜索：构建时生成 search-index.json，前端即时过滤
+  const input = document.getElementById('post-search');
+  const list = document.getElementById('post-list');
+  const count = document.getElementById('post-count');
+  const items = Array.from(list?.querySelectorAll('li') ?? []);
+  let indexPromise = null;
+
+  if (input && list && count && items.length > 0) {
+    const getIndex = () =>
+      (indexPromise ??= fetch('/search-index.json').then((r) => r.json()));
+
+    const matches = (entry, terms) => {
+      const hay = `${entry.title} ${entry.description} ${entry.content}`.toLowerCase();
+      return terms.every((t) => hay.includes(t));
+    };
+
+    const render = (visible) => {
+      items.forEach((li) => (li.style.display = visible.has(li.dataset.id) ? '' : 'none'));
+      count.textContent = input.value.trim()
+        ? `找到 ${visible.size} 篇相关文章`
+        : `共 ${items.length} 篇 · 持续更新中`;
+    };
+
+    input.addEventListener('input', async () => {
+      const query = input.value.trim();
+      const all = new Set(items.map((li) => li.dataset.id));
+      if (!query) return render(all);
+      const terms = query.toLowerCase().split(/\s+/);
+      const index = await getIndex();
+      render(new Set(index.filter((e) => matches(e, terms)).map((e) => e.id)));
+    });
+  }
+</script>
