@@ -100,6 +100,6 @@ hsla(${glowHue}, 90%, 62%, 0.17)  →  hsla(${glowHue}, 8%, 62%, 0.17)   // 深�
 
 ## 相关链接
 
-- 原插件：https://github.com/WYH66666666/DSH-Transparent-UI-Plugin（MIT，© 2026 John Wu）
+- 原插件：[DSH-Transparent-UI-Plugin](https://github.com/WYH66666666/DSH-Transparent-UI-Plugin)（MIT，© 2026 John Wu）
 - DeepSeek Harness：https://github.com/deepseek-ai/deepseek-harness
 - 修改涉及的文件：`fluid-tones.ts`、`theme-layer.ts`（src 与 lib 同步）
