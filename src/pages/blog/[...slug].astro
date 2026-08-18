@@ -13,6 +13,18 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
+// 上一篇 / 下一篇（按日期排序的相邻文章）
+const allPosts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort(
+    (a, b) =>
+      (b.data.pubDate?.valueOf() ?? Number.MAX_SAFE_INTEGER) -
+      (a.data.pubDate?.valueOf() ?? Number.MAX_SAFE_INTEGER)
+  );
+const idx = allPosts.findIndex((p) => p.id === post.id);
+const newer = idx > 0 ? allPosts[idx - 1] : null; // 更新的一篇
+const older = idx >= 0 && idx < allPosts.length - 1 ? allPosts[idx + 1] : null; // 更早的一篇
+
 // 阅读时长估算：中文约 400 字/分钟，英文约 200 词/分钟
 const body = post.body ?? '';
 const zhChars = (body.match(/[\u4e00-\u9fa5]/g) || []).length;
@@ -57,6 +69,28 @@ const fmt = (d: Date) =>
     <div class="prose">
       <Content />
     </div>
+    <nav class="post-pager" aria-label="文章导航">
+      {
+        newer ? (
+          <a class="post-pager__item" href={`/blog/${newer.id}/`}>
+            <span class="post-pager__label">← 较新</span>
+            <span class="post-pager__title">{newer.data.title || newer.id}</span>
+          </a>
+        ) : (
+          <span></span>
+        )
+      }
+      {
+        older ? (
+          <a class="post-pager__item post-pager__item--right" href={`/blog/${older.id}/`}>
+            <span class="post-pager__label">较旧 →</span>
+            <span class="post-pager__title">{older.data.title || older.id}</span>
+          </a>
+        ) : (
+          <span></span>
+        )
+      }
+    </nav>
   </article>
 </BaseLayout>
 
